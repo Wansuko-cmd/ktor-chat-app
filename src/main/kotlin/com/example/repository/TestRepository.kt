@@ -4,7 +4,7 @@ import com.example.domain.Message
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TestRepository: BaseRepository {
+class TestRepository: BaseRepositoryInterface {
 
     companion object {
         val messagesData = mutableListOf<Message>()

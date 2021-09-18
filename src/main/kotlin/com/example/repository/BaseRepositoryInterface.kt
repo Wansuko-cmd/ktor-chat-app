@@ -3,7 +3,7 @@ package com.example.repository
 import com.example.domain.Message
 import kotlinx.coroutines.flow.Flow
 
-interface BaseRepository {
+interface BaseRepositoryInterface {
 
     suspend fun insertMessage(message: Message): Boolean
 

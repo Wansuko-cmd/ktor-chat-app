@@ -1,6 +1,6 @@
 package com.example.installer
 
-import com.example.repository.BaseRepository
+import com.example.repository.BaseRepositoryInterface
 import com.example.repository.TestRepository
 import com.example.service.chat.ChatService
 import com.example.service.chat.ChatServiceInterface
@@ -13,7 +13,7 @@ fun Application.koinInstaller(){
 
     val testModule = module {
 
-        factory<BaseRepository> { TestRepository() }
+        factory<BaseRepositoryInterface> { TestRepository() }
 
         factory<ChatServiceInterface> { ChatService() }
     }
