@@ -48,9 +48,9 @@ class TestRepository: BaseRepositoryInterface {
         )
     }
 
-    override suspend fun insertMessage(message: Message): Boolean {
+    override suspend fun insertMessage(message: Message): Flow<Boolean> {
         messagesData.add(message)
-        return true
+        return flow { emit(true) }
     }
 
     override suspend fun getAllMessages(): Flow<List<Message>> {
@@ -65,20 +65,22 @@ class TestRepository: BaseRepositoryInterface {
         return flow { emit(messagesData.first { it.id == messageId }) }
     }
 
-    override suspend fun updateMessage(message: Message): Boolean {
+    override suspend fun updateMessage(message: Message): Flow<Int> {
         messagesData[messagesData.indexOfFirst { it.id == message.id }] = message
-        return true
+        return flow { emit(1) }
     }
 
-    override suspend fun deleteMessage(messageId: String): Int {
+    override suspend fun deleteMessage(messageId: String): Flow<Int> {
 
         val index = messagesData.indexOfFirst { it.id == messageId }
 
-        return if(index != -1) {
-            messagesData.removeAt(messagesData.indexOfFirst { it.id == messageId })
-            1
-        }else{
-            0
+        return flow {
+            if (index != -1) {
+                messagesData.removeAt(messagesData.indexOfFirst { it.id == messageId })
+                emit(1)
+            } else {
+                emit(0)
+            }
         }
     }
 

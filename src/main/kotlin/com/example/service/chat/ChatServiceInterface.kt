@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChatServiceInterface {
 
-    suspend fun createMessage(userName: String, text: String): Message
+    suspend fun createMessage(userName: String, text: String): Flow<Message>
 
     suspend fun getAllMessages(): Flow<List<Message>>
 
@@ -15,5 +15,5 @@ interface ChatServiceInterface {
 
     suspend fun updateMessage(messageId: String, userName: String, text: String): Boolean
 
-    suspend fun deleteMessage(messageId: String): Boolean
+    suspend fun deleteMessage(messageId: String): Flow<Boolean>
 }

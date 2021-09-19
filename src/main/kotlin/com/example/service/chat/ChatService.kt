@@ -5,6 +5,8 @@ import com.example.repository.BaseRepositoryInterface
 import com.example.service.datetime.DatetimeService.now
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.LocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -13,7 +15,7 @@ class ChatService: ChatServiceInterface, KoinComponent {
 
     private val baseRepository: BaseRepositoryInterface by inject()
 
-    override suspend fun createMessage(userName: String, text: String): Message {
+    override suspend fun createMessage(userName: String, text: String): Flow<Message> {
         val message = Message(
             userName = userName,
             text = text,
@@ -23,7 +25,7 @@ class ChatService: ChatServiceInterface, KoinComponent {
 
         baseRepository.insertMessage(message)
 
-        return message
+        return flow { emit(message) }
     }
 
     override suspend fun getAllMessages(): Flow<List<Message>>
@@ -53,13 +55,12 @@ class ChatService: ChatServiceInterface, KoinComponent {
         return true
     }
 
-    override suspend fun deleteMessage(messageId: String): Boolean{
+    override suspend fun deleteMessage(messageId: String): Flow<Boolean>{
 
-        return try {
-            baseRepository.deleteMessage(messageId) == 1
-
-        }catch (e: Exception){
-            false
+        return flow {
+            val number = baseRepository.deleteMessage(messageId).first()
+            if(number == 1) emit(true)
+            else emit(false)
         }
     }
 }

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BaseRepositoryInterface {
 
-    suspend fun insertMessage(message: Message): Boolean
+    suspend fun insertMessage(message: Message): Flow<Boolean>
 
     suspend fun getAllMessages(): Flow<List<Message>>
 
@@ -13,7 +13,7 @@ interface BaseRepositoryInterface {
 
     suspend fun getMessageById(messageId: String): Flow<Message>
 
-    suspend fun updateMessage(message: Message): Boolean
+    suspend fun updateMessage(message: Message): Flow<Int>
 
-    suspend fun deleteMessage(messageId: String): Int
+    suspend fun deleteMessage(messageId: String): Flow<Int>
 }

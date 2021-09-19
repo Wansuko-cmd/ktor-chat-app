@@ -6,6 +6,7 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.coroutines.flow.first
 
 fun Route.chatDeleteRoute(chatService: ChatServiceInterface){
 
@@ -15,7 +16,7 @@ fun Route.chatDeleteRoute(chatService: ChatServiceInterface){
 
         if(id != null){
 
-            if(chatService.deleteMessage(id)){
+            if(chatService.deleteMessage(id).first()){
                 call.respondText("Success")
             }else{
                 call.respond(HttpStatusCode.BadRequest)

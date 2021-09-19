@@ -5,13 +5,14 @@ import io.ktor.application.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.coroutines.flow.first
 
 fun Route.chatCreateRoute(chatService: ChatServiceInterface){
 
     post{
         val (userName, text) = call.receive<ChatCreateRequest>()
 
-        val message = chatService.createMessage(userName, text)
+        val message = chatService.createMessage(userName, text).first()
 
         call.respond(ChatCreateResponse.fromMessage(message))
     }

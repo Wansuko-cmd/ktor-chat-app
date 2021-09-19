@@ -6,12 +6,11 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.*
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
+import javax.sql.DataSource
 
 class DatabaseBuilder: DatabaseBuilderInterface {
 
-    override val database: Database by lazy {
-        Database.connect(hikari())
-    }
+    override lateinit var database: Database
 
     private val appConfig = HoconApplicationConfig(ConfigFactory.load())
     private val driverClassName = appConfig.property("db.driverClassName").getString()
@@ -20,13 +19,21 @@ class DatabaseBuilder: DatabaseBuilderInterface {
     private val password = appConfig.property("db.password").getString()
 
     init {
-        migrate()
+        val pool = hikari()
+
+        database = Database.connect(hikari())
+
+        migrate(pool)
     }
 
-    private fun migrate() = Flyway.configure()
-        .dataSource(jdbcUrl, username, password)
-        .load()
-        .migrate()
+    private fun migrate(dataSource: DataSource){
+        val flyway = Flyway.configure()
+            .dataSource(dataSource)
+            .load()
+
+        flyway.info()
+        flyway.migrate()
+    }
 
 
     private fun hikari(): HikariDataSource {
