@@ -9,9 +9,11 @@ interface BaseRepositoryInterface {
 
     suspend fun getAllMessages(): Flow<List<Message>>
 
+    suspend fun getMessages(limit: Int): Flow<List<Message>>
+
     suspend fun getMessageById(messageId: String): Flow<Message>
 
     suspend fun updateMessage(message: Message): Boolean
 
-    suspend fun deleteMessage(messageId: String): Boolean
+    suspend fun deleteMessage(messageId: String): Int
 }

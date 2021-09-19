@@ -1,4 +1,4 @@
-package com.example.routing.chat.create
+package com.example.routing.chat.read
 
 import com.example.domain.Message
 import kotlinx.datetime.LocalDateTime
@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatCreateResponse(
+data class ChatReadRespond(
     val id: String,
     @SerialName("user_name")
     val userName: String,
@@ -14,9 +14,10 @@ data class ChatCreateResponse(
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 ){
-    companion object {
-        fun fromMessage(message: Message): ChatCreateResponse{
-            return ChatCreateResponse(
+
+    companion object{
+        fun fromMessage(message: Message): ChatReadRespond{
+            return ChatReadRespond(
                 message.id,
                 message.userName,
                 message.text,

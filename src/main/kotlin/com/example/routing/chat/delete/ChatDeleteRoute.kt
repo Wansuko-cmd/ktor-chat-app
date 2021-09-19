@@ -9,13 +9,17 @@ import io.ktor.routing.*
 
 fun Route.chatDeleteRoute(chatService: ChatServiceInterface){
 
-    delete {
-        val chatDeleteRequest = call.receive<ChatDeleteRequest>()
+    delete("{id}") {
 
-        if(chatService.deleteMessage(chatDeleteRequest.id)){
-            call.respondText("SUCCESS")
-        }else{
-            call.respond(HttpStatusCode.BadRequest)
+        val id = call.parameters["id"]
+
+        if(id != null){
+
+            if(chatService.deleteMessage(id)){
+                call.respondText("SUCCESS")
+            }else{
+                call.respond(HttpStatusCode.BadRequest)
+            }
         }
     }
 }

@@ -9,6 +9,8 @@ interface ChatServiceInterface {
 
     suspend fun getAllMessages(): Flow<List<Message>>
 
+    suspend fun getMessages(limit: Int): Flow<List<Message>>
+
     suspend fun getMessageById(messageId: String): Flow<Message>
 
     suspend fun updateMessage(messageId: String, userName: String, text: String): Boolean

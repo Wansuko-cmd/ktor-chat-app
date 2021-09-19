@@ -29,12 +29,16 @@ class ChatService: ChatServiceInterface, KoinComponent {
     override suspend fun getAllMessages(): Flow<List<Message>>
     = baseRepository.getAllMessages()
 
+    override suspend fun getMessages(limit: Int): Flow<List<Message>>
+    = baseRepository.getMessages(limit)
+
     override suspend fun getMessageById(messageId: String): Flow<Message>
     = baseRepository.getMessageById(messageId)
 
     override suspend fun updateMessage(messageId: String, userName: String, text: String): Boolean {
 
         baseRepository.getMessageById(messageId).collect {
+
             val message = Message(
                 id = messageId,
                 userName = userName,
@@ -49,5 +53,13 @@ class ChatService: ChatServiceInterface, KoinComponent {
         return true
     }
 
-    override suspend fun deleteMessage(messageId: String): Boolean = baseRepository.deleteMessage(messageId)
+    override suspend fun deleteMessage(messageId: String): Boolean{
+
+        return try {
+            baseRepository.deleteMessage(messageId) == 1
+
+        }catch (e: Exception){
+            false
+        }
+    }
 }
