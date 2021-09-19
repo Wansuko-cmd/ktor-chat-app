@@ -16,7 +16,7 @@ fun Route.chatDeleteRoute(chatService: ChatServiceInterface){
         if(id != null){
 
             if(chatService.deleteMessage(id)){
-                call.respondText("SUCCESS")
+                call.respondText("Success")
             }else{
                 call.respond(HttpStatusCode.BadRequest)
             }

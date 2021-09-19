@@ -9,11 +9,9 @@ import io.ktor.routing.*
 fun Route.chatCreateRoute(chatService: ChatServiceInterface){
 
     post{
-        val chatCreateJson = call.receive<ChatCreateRequest>()
+        val (userName, text) = call.receive<ChatCreateRequest>()
 
-        val message = chatService.createMessage(
-            chatCreateJson.userName, chatCreateJson.text
-        )
+        val message = chatService.createMessage(userName, text)
 
         call.respond(ChatCreateResponse.fromMessage(message))
     }
