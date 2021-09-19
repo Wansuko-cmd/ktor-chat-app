@@ -12,7 +12,7 @@ fun Route.chatCreateRoute(chatService: ChatServiceInterface){
     post{
         val (userName, text) = call.receive<ChatCreateRequest>()
 
-        val message = chatService.createMessage(userName, text).first()
+        val message = chatService.createMessage(userName, text)
 
         call.respond(ChatCreateResponse.fromMessage(message))
     }

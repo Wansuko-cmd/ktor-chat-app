@@ -13,9 +13,8 @@ fun Route.chatReadRoute(chatService: ChatServiceInterface){
         val messages: MutableList<ChatReadRespond> = mutableListOf()
 
         if(call.request.queryParameters["limit"] == null){
-            chatService.getAllMessages().collect {
-                it.map { message -> messages.add(ChatReadRespond.fromMessage(message)) }
-            }
+            chatService.getAllMessages()
+                .map { messages.add(ChatReadRespond.fromMessage(it)) }
         }else{
             val limit = call.request.queryParameters["limit"]?.toIntOrNull()
 
@@ -24,9 +23,8 @@ fun Route.chatReadRoute(chatService: ChatServiceInterface){
                 return@get
             }
 
-            chatService.getMessages(limit).collect {
-                it.map { message -> messages.add(ChatReadRespond.fromMessage(message)) }
-            }
+            chatService.getMessages(limit)
+                .map { messages.add(ChatReadRespond.fromMessage(it)) }
         }
 
         call.respond(messages)
@@ -37,9 +35,9 @@ fun Route.chatReadRoute(chatService: ChatServiceInterface){
         val id = call.parameters["id"]
 
         if(id != null){
-            chatService.getMessageById(id).collect {
-                call.respond(ChatReadRespond.fromMessage(it))
-            }
+            call.respond(
+                ChatReadRespond.fromMessage(chatService.getMessageById(id))
+            )
         }else{
             call.respond(HttpStatusCode.BadRequest)
         }

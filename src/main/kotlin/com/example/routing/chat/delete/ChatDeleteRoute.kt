@@ -15,8 +15,7 @@ fun Route.chatDeleteRoute(chatService: ChatServiceInterface){
         val id = call.parameters["id"]
 
         if(id != null){
-
-            if(chatService.deleteMessage(id).first()){
+            if(chatService.deleteMessage(id)){
                 call.respondText("Success")
             }else{
                 call.respond(HttpStatusCode.BadRequest)

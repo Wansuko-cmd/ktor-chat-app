@@ -47,6 +47,6 @@ fun Application.koinInstaller(){
 
     install(Koin){
         slf4jLogger()
-        modules(productModule)
+        modules(testModule)
     }
 }

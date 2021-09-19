@@ -2,8 +2,6 @@ package com.example.repository
 
 import com.example.domain.Message
 import com.example.service.datetime.DatetimeService.now
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.LocalDateTime
 
 class TestRepository: BaseRepositoryInterface {
@@ -48,39 +46,37 @@ class TestRepository: BaseRepositoryInterface {
         )
     }
 
-    override suspend fun insertMessage(message: Message): Flow<Boolean> {
+    override suspend fun insertMessage(message: Message): Boolean {
         messagesData.add(message)
-        return flow { emit(true) }
+        return true
     }
 
-    override suspend fun getAllMessages(): Flow<List<Message>> {
-        return flow { emit(messagesData.sortedBy { it.createdAt }) }
+    override suspend fun getAllMessages(): List<Message> {
+        return messagesData.sortedBy { it.createdAt }
     }
 
-    override suspend fun getMessages(limit: Int): Flow<List<Message>> {
-        return flow { emit(messagesData.sortedBy { it.createdAt }.take(limit)) }
+    override suspend fun getMessages(limit: Int): List<Message> {
+        return messagesData.sortedBy { it.createdAt }.take(limit)
     }
 
-    override suspend fun getMessageById(messageId: String): Flow<Message> {
-        return flow { emit(messagesData.first { it.id == messageId }) }
+    override suspend fun getMessageById(messageId: String): Message {
+        return messagesData.first { it.id == messageId }
     }
 
-    override suspend fun updateMessage(message: Message): Flow<Int> {
+    override suspend fun updateMessage(message: Message): Int {
         messagesData[messagesData.indexOfFirst { it.id == message.id }] = message
-        return flow { emit(1) }
+        return 1
     }
 
-    override suspend fun deleteMessage(messageId: String): Flow<Int> {
+    override suspend fun deleteMessage(messageId: String): Int {
 
         val index = messagesData.indexOfFirst { it.id == messageId }
 
-        return flow {
-            if (index != -1) {
-                messagesData.removeAt(messagesData.indexOfFirst { it.id == messageId })
-                emit(1)
-            } else {
-                emit(0)
-            }
+        return if (index != -1) {
+            messagesData.removeAt(messagesData.indexOfFirst { it.id == messageId })
+            1
+        } else {
+            0
         }
     }
 
