@@ -30,4 +30,7 @@ dependencies {
     //Koin
     implementation("io.insert-koin:koin-ktor:$koinVersion")
     implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
+
+    //kotlinx-datetime
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
 }

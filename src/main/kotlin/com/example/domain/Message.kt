@@ -1,6 +1,6 @@
 package com.example.domain
 
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 import java.util.*
 
 data class Message(

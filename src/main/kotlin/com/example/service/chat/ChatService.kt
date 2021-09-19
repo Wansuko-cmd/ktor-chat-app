@@ -2,11 +2,12 @@ package com.example.service.chat
 
 import com.example.domain.Message
 import com.example.repository.BaseRepositoryInterface
+import com.example.service.datetime.DatetimeService.now
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.datetime.LocalDateTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.time.LocalDateTime
 
 class ChatService: ChatServiceInterface, KoinComponent {
 
