@@ -1,5 +1,7 @@
 package com.example.installer
 
+import com.example.db.builder.DatabaseBuilder
+import com.example.db.builder.DatabaseBuilderInterface
 import com.example.repository.BaseRepositoryInterface
 import com.example.repository.TestRepository
 import com.example.service.chat.ChatService
@@ -20,6 +22,8 @@ fun Application.koinInstaller(){
         factory<ChatServiceInterface> { ChatService() }
 
         single<LocalDateTimeServiceInterface> { LocalDateTimeService() }
+
+        single<DatabaseBuilderInterface> { DatabaseBuilder() }
     }
 
     install(Koin){

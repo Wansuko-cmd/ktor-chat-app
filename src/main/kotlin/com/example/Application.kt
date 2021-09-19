@@ -11,5 +11,6 @@ fun Application.module(){
     //Installの設定
     mainInstaller()
 
+    //Routeの設定
     mainRoute()
 }

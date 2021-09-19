@@ -9,7 +9,7 @@ import kotlinx.datetime.LocalDateTime
 class TestRepository: BaseRepositoryInterface {
 
     companion object {
-        val messagesData = mutableListOf(
+        private val messagesData = mutableListOf(
             Message(
                 "b637529e-3509-4015-853e-c9d61704a32f",
                 "test",
