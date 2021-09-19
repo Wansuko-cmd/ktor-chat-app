@@ -14,10 +14,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.5.30"
 }
 
-group = "com.example"
+group = "com.wsr"
 version = "0.0.1"
 application {
-    mainClass.set("com.example.ApplicationKt")
+    mainClass.set("com.wsr.ApplicationKt")
 }
 
 repositories {

@@ -1,6 +1,6 @@
 package db.migration
 
-import com.example.db.table.Messages
+import com.wsr.db.table.Messages
 import org.flywaydb.core.api.migration.BaseJavaMigration
 import org.flywaydb.core.api.migration.Context
 import org.jetbrains.exposed.sql.SchemaUtils
