@@ -5,6 +5,8 @@ val koinVersion: String by project
 val datetimeVersion: String by project
 val exposedVersion: String by project
 val hikariVersion: String by project
+val postgresVersion: String by project
+val flywayVersion: String by project
 
 plugins {
     application
@@ -45,4 +47,10 @@ dependencies {
 
     //hikari
     implementation("com.zaxxer:HikariCP:$hikariVersion")
+
+    //hikari用のpostgresのドライバー
+    implementation("org.postgresql:postgresql:$postgresVersion")
+
+    //flyway
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
 }
