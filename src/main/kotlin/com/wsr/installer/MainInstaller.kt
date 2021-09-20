@@ -6,4 +6,5 @@ fun Application.mainInstaller(){
 
     koinInstaller()
     serializerInstaller()
+    contentTypeCheckerInstaller()
 }

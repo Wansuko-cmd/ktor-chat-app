@@ -22,6 +22,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://wansuko-cmd.github.io/maven/") }
 }
 
 dependencies {
@@ -53,4 +54,7 @@ dependencies {
 
     //flyway
     implementation("org.flywaydb:flyway-core:$flywayVersion")
+
+    //Content-Type-Checker
+    implementation("com.wsr:content-type-checker:0.0.2")
 }
