@@ -26,16 +26,17 @@ class ChatUpdateTest : KoinComponent {
             module(isTest = true, testModule = testModule)
         }) {
 
-            val testMessage = TestMessageData.messagesData.first()
+            //アップデートするMessage
+            val beforeUpdateMessage = TestMessageData.messagesData.first()
 
+            //飛んできたリクエスト
             val json = Json.encodeToString(
                 ChatUpdateRequest(
-                    testMessage.id,
-                    testMessage.userName,
-                    "Update"
+                    beforeUpdateMessage.id,
+                    "更新するユーザー名",
+                    "更新する内容"
                 )
             )
-
 
 
             handleRequest(HttpMethod.Put, "/chat"){
@@ -45,14 +46,18 @@ class ChatUpdateTest : KoinComponent {
 
                 assertEquals(HttpStatusCode.OK, response.status())
 
+                //DBの中身が更新されていることを確認
                 runBlocking {
 
-                    //DBの中身が更新されていることを確認
+                    //DBに挿入されている値を取得
                     val baseRepository by inject<BaseRepositoryInterface>()
 
-                    val afterMessage = baseRepository.getMessageById(testMessage.id)
+                    val databaseMessage = baseRepository.getMessageById(beforeUpdateMessage.id)
 
-                    assertEquals("Update", afterMessage.text)
+                    assertEquals("更新するユーザー名", databaseMessage.userName)
+                    assertEquals("更新する内容", databaseMessage.text)
+                    assertEquals(TestMessageData.beforeTime, databaseMessage.createdAt)
+                    assertEquals(TestMessageData.afterTime, databaseMessage.updatedAt)
                 }
             }
         }
@@ -65,16 +70,19 @@ class ChatUpdateTest : KoinComponent {
             module(isTest = true, testModule = testModule)
         }) {
 
-            val testMessage = TestMessageData.messagesData.first()
+            //アップデートするMessage
+            val beforeUpdateMessage = TestMessageData.messagesData.first()
 
+            //飛んできたリクエスト
             val json = Json.encodeToString(
                 ChatUpdateRequest(
-                    testMessage.id,
-                    testMessage.userName,
-                    "Update"
+                    beforeUpdateMessage.id,
+                    "更新するユーザー名",
+                    "更新する内容"
                 )
             )
 
+            //ContentTypeがJsonではなくAny
             handleRequest(HttpMethod.Put, "/chat"){
                 addHeader("Content-Type", ContentType.Any.toString())
                 setBody(json)
@@ -82,14 +90,18 @@ class ChatUpdateTest : KoinComponent {
 
                 assertEquals(HttpStatusCode.UnsupportedMediaType, response.status())
 
+                //DBの中身が更新されていないことを確認
                 runBlocking {
 
-                    //DBの中身が更新されていないことを確認
+                    //DBに挿入されている値を取得
                     val baseRepository by inject<BaseRepositoryInterface>()
 
-                    val afterMessage = baseRepository.getMessageById(testMessage.id)
+                    val databaseMessage = baseRepository.getMessageById(beforeUpdateMessage.id)
 
-                    assertEquals(testMessage.text, afterMessage.text)
+                    assertEquals(beforeUpdateMessage.userName, databaseMessage.userName)
+                    assertEquals(beforeUpdateMessage.text, databaseMessage.text)
+                    assertEquals(TestMessageData.beforeTime, databaseMessage.createdAt)
+                    assertEquals(TestMessageData.beforeTime, databaseMessage.updatedAt)
                 }
             }
         }
@@ -102,12 +114,11 @@ class ChatUpdateTest : KoinComponent {
             module(isTest = true, testModule = testModule)
         }) {
 
-            val testMessage = TestMessageData.messagesData.first()
             val json = Json.encodeToString(
                 ChatUpdateRequest(
-                    testMessage.id + "test",
-                    testMessage.userName,
-                    "Update"
+                    "存在しないid",
+                    "更新するユーザー名",
+                    "更新する内容"
                 )
             )
 
@@ -117,16 +128,6 @@ class ChatUpdateTest : KoinComponent {
             }.apply {
 
                 assertEquals(HttpStatusCode.UnprocessableEntity, response.status())
-
-                runBlocking {
-
-                    //DBの中身が更新されていないことを確認
-                    val baseRepository by inject<BaseRepositoryInterface>()
-
-                    val afterMessage = baseRepository.getMessageById(testMessage.id)
-
-                    assertEquals(testMessage.text, afterMessage.text)
-                }
             }
         }
     }

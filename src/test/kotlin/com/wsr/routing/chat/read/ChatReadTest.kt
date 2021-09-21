@@ -15,13 +15,14 @@ import kotlin.test.assertEquals
 
 class ChatReadTest {
 
-
     @Test
     fun 全てのMessageを読み取る場合(){
 
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
+
+            //期待される値
             val chatReadResponds = Json.encodeToString(
                 TestMessageData.messagesData.map { ChatReadRespond.fromMessage(it) }
             )
@@ -38,10 +39,15 @@ class ChatReadTest {
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
+            //制限
             val limit = 5
 
+            //期待される値
             val chatReadResponds = Json.encodeToString(
-                TestMessageData.messagesData.map { ChatReadRespond.fromMessage(it) }.take(limit)
+                TestMessageData.messagesData
+                    .sortedBy { it.updatedAt }
+                    .take(limit)
+                    .map { ChatReadRespond.fromMessage(it) }
             )
 
             handleRequest(HttpMethod.Get, "/chat?limit=${limit}").apply {
@@ -56,6 +62,7 @@ class ChatReadTest {
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
+            //制限の値に、数値に変換できない値を入れる
             val limit = "あ"
 
             handleRequest(HttpMethod.Get, "/chat?limit=${limit}").apply {
@@ -70,8 +77,10 @@ class ChatReadTest {
             module(isTest = true, testModule = testModule)
         }){
 
+            //特定のMessage
             val messageData = TestMessageData.messagesData.first()
 
+            //期待される値
             val chatReadRespond = Json.encodeToString(
                 ChatReadRespond.fromMessage(TestMessageData.messagesData.first())
             )
@@ -89,9 +98,10 @@ class ChatReadTest {
             module(isTest = true, testModule = testModule)
         }){
 
-            val messageData = TestMessageData.messagesData.first()
+            val id = "存在しないid"
 
-            handleRequest(HttpMethod.Get, "/chat/${messageData.id + "test"}").apply {
+            //存在しないidを入れる
+            handleRequest(HttpMethod.Get, "/chat/$id").apply {
                 assertEquals(HttpStatusCode.UnprocessableEntity, response.status())
             }
         }

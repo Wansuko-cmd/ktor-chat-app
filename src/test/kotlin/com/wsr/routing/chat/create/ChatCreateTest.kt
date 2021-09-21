@@ -3,7 +3,6 @@
 package com.wsr.routing.chat.create
 
 import com.wsr.di.testModule
-import com.wsr.mock.data.TestMessageData
 import com.wsr.module
 import com.wsr.repository.BaseRepositoryInterface
 import io.ktor.http.*
@@ -25,11 +24,14 @@ class ChatCreateTest : KoinComponent {
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }) {
-            val chatCreateRequest = ChatCreateRequest(
-                "testUserName",
-                "testText"
+
+            //飛んできたリクエスト
+            val json = Json.encodeToString(
+                ChatCreateRequest(
+                    "新しいユーザー名",
+                    "新しいテキスト"
+                )
             )
-            val json = Json.encodeToString(chatCreateRequest)
 
             handleRequest(HttpMethod.Post, "/chat") {
                 addHeader("Content-Type", ContentType.Application.Json.toString())
@@ -38,16 +40,16 @@ class ChatCreateTest : KoinComponent {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
 
+                //DBに挿入されたかどうかを確認
                 runBlocking {
-
-                    //DBに挿入されたかどうかを確認
+                    //リスポンスを取得
                     val result = Json.decodeFromString<ChatCreateResponse>(response.content!!)
 
+                    //DBに挿入されている値を取得
                     val baseRepository by inject<BaseRepositoryInterface>()
+                    val databaseMessage = baseRepository.getMessageById(result.id)
 
-                    val afterMessage = baseRepository.getMessageById(result.id)
-
-                    assertEquals(ChatCreateResponse.fromMessage(afterMessage), result)
+                    assertEquals(ChatCreateResponse.fromMessage(databaseMessage), result)
                 }
             }
         }
@@ -60,12 +62,15 @@ class ChatCreateTest : KoinComponent {
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }) {
-            val chatCreateRequest = ChatCreateRequest(
-                "testUserName",
-                "testText"
+            //飛んできたリクエスト
+            val json = Json.encodeToString(
+                ChatCreateRequest(
+                    "新しいユーザー名",
+                    "新しいテキスト"
+                )
             )
-            val json = Json.encodeToString(chatCreateRequest)
 
+            //ContentTypeがJsonではなくAny
             handleRequest(HttpMethod.Post, "/chat") {
                 addHeader("Content-Type", ContentType.Application.Any.toString())
                 setBody(json)

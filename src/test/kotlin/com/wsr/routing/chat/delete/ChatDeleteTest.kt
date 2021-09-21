@@ -17,6 +17,7 @@ class ChatDeleteTest {
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
+            //特定のMessage
             val id = TestMessageData.messagesData.first().id
 
             handleRequest(HttpMethod.Delete, "/chat/${id}").apply {
@@ -30,9 +31,9 @@ class ChatDeleteTest {
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
-            val id = TestMessageData.messagesData.first().id + "test"
+            val id = "存在しないid"
 
-            handleRequest(HttpMethod.Delete, "/chat/${id}").apply {
+            handleRequest(HttpMethod.Delete, "/chat/$id").apply {
                 assertEquals(HttpStatusCode.UnprocessableEntity, response.status())
             }
         }
