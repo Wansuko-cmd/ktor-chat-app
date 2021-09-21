@@ -48,7 +48,7 @@ class TestRepository: BaseRepositoryInterface {
             messagesData.removeAt(messagesData.indexOfFirst { it.id == messageId })
             1
         } else {
-            0
+            throw MessageNotFoundException()
         }
     }
 

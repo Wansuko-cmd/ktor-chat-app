@@ -1,6 +1,5 @@
 @file:Suppress("NonAsciiCharacters", "TestFunctionName")
 
-
 package com.wsr.routing.chat.read
 
 import com.wsr.di.testModule
