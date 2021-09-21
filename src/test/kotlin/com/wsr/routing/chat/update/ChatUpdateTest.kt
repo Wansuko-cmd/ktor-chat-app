@@ -5,14 +5,18 @@ package com.wsr.routing.chat.update
 import com.wsr.di.testModule
 import com.wsr.mock.data.TestMessageData
 import com.wsr.module
+import com.wsr.repository.BaseRepositoryInterface
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ChatUpdateTest {
+class ChatUpdateTest : KoinComponent {
 
     @Test
     fun 正常にアップデートできたとき(){
@@ -32,6 +36,8 @@ class ChatUpdateTest {
                 )
             )
 
+
+
             handleRequest(HttpMethod.Put, "/chat"){
                 addHeader("Content-Type", ContentType.Application.Json.toString())
                 setBody(json)
@@ -39,13 +45,15 @@ class ChatUpdateTest {
 
                 assertEquals(HttpStatusCode.OK, response.status())
 
-                val afterMessage = TestMessageData.messagesData.first()
-                assertEquals(
-                    Json.encodeToString(
-                        ChatUpdateRequest(afterMessage.id, afterMessage.userName, afterMessage.text)
-                    ),
-                    json
-                )
+                runBlocking {
+
+                    //DBの中身が更新されていることを確認
+                    val baseRepository by inject<BaseRepositoryInterface>()
+
+                    val afterMessage = baseRepository.getMessageById(testMessage.id)
+
+                    assertEquals("Update", afterMessage.text)
+                }
             }
         }
     }
@@ -73,6 +81,16 @@ class ChatUpdateTest {
             }.apply {
 
                 assertEquals(HttpStatusCode.UnsupportedMediaType, response.status())
+
+                runBlocking {
+
+                    //DBの中身が更新されていないことを確認
+                    val baseRepository by inject<BaseRepositoryInterface>()
+
+                    val afterMessage = baseRepository.getMessageById(testMessage.id)
+
+                    assertEquals(testMessage.text, afterMessage.text)
+                }
             }
         }
     }
@@ -99,6 +117,16 @@ class ChatUpdateTest {
             }.apply {
 
                 assertEquals(HttpStatusCode.UnprocessableEntity, response.status())
+
+                runBlocking {
+
+                    //DBの中身が更新されていないことを確認
+                    val baseRepository by inject<BaseRepositoryInterface>()
+
+                    val afterMessage = baseRepository.getMessageById(testMessage.id)
+
+                    assertEquals(testMessage.text, afterMessage.text)
+                }
             }
         }
     }

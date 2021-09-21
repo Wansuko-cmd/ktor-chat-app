@@ -5,15 +5,19 @@ package com.wsr.routing.chat.create
 import com.wsr.di.testModule
 import com.wsr.mock.data.TestMessageData
 import com.wsr.module
+import com.wsr.repository.BaseRepositoryInterface
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ChatCreateTest {
+class ChatCreateTest : KoinComponent {
 
     @Test
     fun Messageを新しく追加する() {
@@ -34,9 +38,17 @@ class ChatCreateTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
 
-                val result = Json.decodeFromString<ChatCreateResponse>(response.content!!)
-                val dataResult = ChatCreateResponse.fromMessage(TestMessageData.messagesData.first { it.id == result.id })
-                assertEquals(dataResult, result)
+                runBlocking {
+
+                    //DBに挿入されたかどうかを確認
+                    val result = Json.decodeFromString<ChatCreateResponse>(response.content!!)
+
+                    val baseRepository by inject<BaseRepositoryInterface>()
+
+                    val afterMessage = baseRepository.getMessageById(result.id)
+
+                    assertEquals(ChatCreateResponse.fromMessage(afterMessage), result)
+                }
             }
         }
     }
