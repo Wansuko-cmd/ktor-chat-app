@@ -1,23 +1,17 @@
 package com.wsr
 
-import io.ktor.routing.*
-import io.ktor.http.*
-import io.ktor.serialization.*
-import io.ktor.features.*
 import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
+import io.ktor.http.*
 import kotlin.test.*
 import io.ktor.server.testing.*
-import com.wsr.plugins.*
 
 class ApplicationTest {
     @Test
     fun testRoot() {
-        withTestApplication({ configureRouting() }) {
+        withTestApplication(Application::module) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("Hello World!", response.content)
+                assertEquals("Hello World", response.content)
             }
         }
     }

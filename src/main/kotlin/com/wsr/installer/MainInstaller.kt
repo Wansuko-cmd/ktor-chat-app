@@ -1,10 +1,11 @@
 package com.wsr.installer
 
 import io.ktor.application.*
+import org.koin.core.module.Module
 
-fun Application.mainInstaller(){
+fun Application.mainInstaller(isTest: Boolean, testModule: Module?){
 
-    koinInstaller()
+    koinInstaller(isTest, testModule)
     serializerInstaller()
     contentTypeCheckerInstaller()
 }

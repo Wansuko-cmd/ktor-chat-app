@@ -26,10 +26,16 @@ repositories {
 }
 
 dependencies {
+
+    //Ktor
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
+
+    //Log
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
+    //Test
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
 
