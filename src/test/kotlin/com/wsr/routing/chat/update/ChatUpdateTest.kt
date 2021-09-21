@@ -52,7 +52,7 @@ class ChatUpdateTest {
 
 
     @Test
-    fun ContentTypeがJsonではないとき(){
+    fun ContentTypeがJsonではないときUnsupportedMediaTypeを返す(){
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }) {
@@ -79,7 +79,7 @@ class ChatUpdateTest {
 
 
     @Test
-    fun 間違ったidを指定したとき(){
+    fun 間違ったidを指定したときUnprocessableEntityを返す(){
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }) {
