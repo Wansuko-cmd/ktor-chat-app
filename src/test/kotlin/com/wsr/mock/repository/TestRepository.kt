@@ -4,7 +4,9 @@ import com.wsr.domain.Message
 import com.wsr.mock.data.TestMessageData
 import com.wsr.repository.BaseRepositoryInterface
 import com.wsr.service.datetime.DatetimeService.now
+import com.wsr.service.message.exception.MessageNotFoundException
 import kotlinx.datetime.LocalDateTime
+import java.util.NoSuchElementException
 
 class TestRepository: BaseRepositoryInterface {
 
@@ -22,12 +24,20 @@ class TestRepository: BaseRepositoryInterface {
     }
 
     override suspend fun getMessageById(messageId: String): Message {
-        return messagesData.first { it.id == messageId }
+        try {
+            return messagesData.first { it.id == messageId }
+        }catch (e: NoSuchElementException){
+            throw MessageNotFoundException(e.message)
+        }
     }
 
     override suspend fun updateMessage(message: Message): Int {
-        messagesData[messagesData.indexOfFirst { it.id == message.id }] = message
-        return 1
+        try {
+            messagesData[messagesData.indexOfFirst { it.id == message.id }] = message
+            return 1
+        }catch (e: NoSuchElementException){
+            throw MessageNotFoundException(e.message)
+        }
     }
 
     override suspend fun deleteMessage(messageId: String): Int {
