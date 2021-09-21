@@ -41,16 +41,6 @@ class MessagesDsl: MessagesDslInterface, KoinComponent {
         }
     }
 
-    override suspend fun get(limit: Int): List<Message> {
-        return transaction(database) {
-
-            Messages.selectAll()
-                .orderBy(Messages.createdAt)
-                .limit(limit)
-                .map { it.toMessage() }
-        }
-    }
-
     override suspend fun getById(id: String): Message {
         return transaction(database) {
 

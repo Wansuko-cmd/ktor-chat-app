@@ -8,8 +8,6 @@ interface BaseRepositoryInterface {
 
     suspend fun getAllMessages(): List<Message>
 
-    suspend fun getMessages(limit: Int): List<Message>
-
     suspend fun getMessageById(messageId: String): Message
 
     suspend fun updateMessage(message: Message): Int

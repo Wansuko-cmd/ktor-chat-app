@@ -7,8 +7,8 @@ import com.wsr.db.dsl.messages.MessagesDslInterface
 import com.wsr.repository.BaseRepositoryInterface
 import com.wsr.repository.PostgresRepository
 import com.wsr.repository.TestRepository
-import com.wsr.service.chat.ChatService
-import com.wsr.service.chat.ChatServiceInterface
+import com.wsr.service.message.MessageService
+import com.wsr.service.message.MessageServiceInterface
 import com.wsr.service.datetime.local_date_time.LocalDateTimeService
 import com.wsr.service.datetime.local_date_time.LocalDateTimeServiceInterface
 import io.ktor.application.*
@@ -23,7 +23,7 @@ fun Application.koinInstaller(){
 
         factory<BaseRepositoryInterface> { TestRepository() }
 
-        factory<ChatServiceInterface> { ChatService() }
+        factory<MessageServiceInterface> { MessageService() }
 
         single<LocalDateTimeServiceInterface> { LocalDateTimeService() }
 
@@ -36,7 +36,7 @@ fun Application.koinInstaller(){
 
         factory<BaseRepositoryInterface> { PostgresRepository() }
 
-        factory<ChatServiceInterface> { ChatService() }
+        factory<MessageServiceInterface> { MessageService() }
 
         single<LocalDateTimeServiceInterface> { LocalDateTimeService() }
 
@@ -47,6 +47,6 @@ fun Application.koinInstaller(){
 
     install(Koin){
         slf4jLogger()
-        modules(testModule)
+        modules(productModule)
     }
 }

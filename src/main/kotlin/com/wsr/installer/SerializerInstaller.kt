@@ -8,9 +8,6 @@ import kotlinx.serialization.json.Json
 fun Application.serializerInstaller() {
 
     install(ContentNegotiation){
-        json(Json {
-            isLenient = true
-            ignoreUnknownKeys = true
-        })
+        json(Json{})
     }
 }

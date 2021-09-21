@@ -13,8 +13,8 @@ fun Application.contentTypeCheckerInstaller(){
             call.respond(
                 HttpStatusCode.UnsupportedMediaType,
                 """
-                    ${call.request.contentType()}は許可されていません
-                    許可されているContent-Typeは${it.joinToString(", ")}のみです
+                    ${call.request.contentType()} is not allowed Content Type.
+                    Use [${it.joinToString(", ")}] Content Type.
                 """.trimIndent()
             )
         }

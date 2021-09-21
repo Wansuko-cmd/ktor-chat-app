@@ -55,10 +55,6 @@ class TestRepository: BaseRepositoryInterface {
         return messagesData.sortedBy { it.createdAt }
     }
 
-    override suspend fun getMessages(limit: Int): List<Message> {
-        return messagesData.sortedBy { it.createdAt }.take(limit)
-    }
-
     override suspend fun getMessageById(messageId: String): Message {
         return messagesData.first { it.id == messageId }
     }

@@ -8,8 +8,6 @@ interface MessagesDslInterface {
 
     suspend fun getAll(): List<Message>
 
-    suspend fun get(limit: Int): List<Message>
-
     suspend fun getById(id: String): Message
 
     suspend fun update(message: Message): Int

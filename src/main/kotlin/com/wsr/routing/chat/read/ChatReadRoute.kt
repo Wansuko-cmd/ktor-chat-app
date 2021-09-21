@@ -1,43 +1,58 @@
 package com.wsr.routing.chat.read
 
-import com.wsr.service.chat.ChatServiceInterface
+import com.wsr.service.message.MessageServiceInterface
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.lang.NumberFormatException
 
-fun Route.chatReadRoute(chatService: ChatServiceInterface){
+fun Route.chatReadRoute(chatService: MessageServiceInterface) {
+
     get {
 
-        val messages: MutableList<ChatReadRespond> = mutableListOf()
+        try {
 
-        if(call.request.queryParameters["limit"] == null){
-            chatService.getAllMessages()
-                .map { messages.add(ChatReadRespond.fromMessage(it)) }
-        }else{
-            val limit = call.request.queryParameters["limit"]?.toIntOrNull()
+            val chatReadResponds = chatService
+                //Messageを取得
+                .getMessages(call.request.queryParameters["limit"]?.toInt())
+                //ChatReadRespond型に変換
+                .map { ChatReadRespond.fromMessage(it) }
 
-            if(limit == null) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-            }
+            //Messageのリストを返す
+            call.respond(chatReadResponds)
 
-            chatService.getMessages(limit)
-                .map { messages.add(ChatReadRespond.fromMessage(it)) }
         }
-
-        call.respond(messages)
+        //limitが数値に変換できなければ
+        catch (e: NumberFormatException){
+            call.respond(HttpStatusCode.BadRequest)
+        }
     }
 
+    //メッセージのidを指定された場合
     get("{id}"){
 
+        //idの取得
         val id = call.parameters["id"]
 
+        //idが指定されていれば
         if(id != null){
-            call.respond(
-                ChatReadRespond.fromMessage(chatService.getMessageById(id))
-            )
-        }else{
+
+            //該当するidのMessageを取得
+            val message =  chatService.getMessageById(id)
+
+            //メッセージが存在すれば
+            if(message != null){
+                call.respond(ChatReadRespond.fromMessage(message))
+            }
+            //存在しなければ
+            else{
+                call.respond(HttpStatusCode.UnprocessableEntity)
+            }
+
+        }
+        //idが指定されていなければ
+        else{
             call.respond(HttpStatusCode.BadRequest)
         }
     }
