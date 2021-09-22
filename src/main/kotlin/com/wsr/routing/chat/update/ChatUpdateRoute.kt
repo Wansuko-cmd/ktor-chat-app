@@ -11,7 +11,7 @@ import kotlinx.serialization.SerializationException
 
 fun Route.chatUpdateRoute(chatService: MessageServiceInterface) {
 
-    allowContentType(listOf(ContentType.Application.Json)) {
+    allowContentType(ContentType.Application.Json) {
 
         put {
 

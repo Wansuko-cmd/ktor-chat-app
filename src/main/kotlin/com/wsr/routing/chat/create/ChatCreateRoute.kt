@@ -11,7 +11,7 @@ import kotlinx.serialization.SerializationException
 
 fun Route.chatCreateRoute(chatService: MessageServiceInterface) {
 
-    allowContentType(listOf(ContentType.Application.Json)) {
+    allowContentType(ContentType.Application.Json) {
         post{
             try{
                 //Jsonの内容を取得

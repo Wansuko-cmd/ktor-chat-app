@@ -21,7 +21,6 @@ class ChatUpdateTest : KoinComponent {
     @Test
     fun 正常にアップデートできたとき(){
 
-
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }) {
@@ -66,6 +65,7 @@ class ChatUpdateTest : KoinComponent {
 
     @Test
     fun ContentTypeがJsonではないときUnsupportedMediaTypeを返す(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }) {
@@ -110,6 +110,7 @@ class ChatUpdateTest : KoinComponent {
 
     @Test
     fun 間違ったidを指定したときUnprocessableEntityを返す(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }) {

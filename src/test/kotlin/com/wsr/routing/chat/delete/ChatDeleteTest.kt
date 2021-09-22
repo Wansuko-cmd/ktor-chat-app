@@ -14,6 +14,7 @@ class ChatDeleteTest {
 
     @Test
     fun 特定のMessageを削除する場合(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
@@ -28,6 +29,7 @@ class ChatDeleteTest {
 
     @Test
     fun 存在しないidを指定した場合UnprocessableEntityを返す(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){

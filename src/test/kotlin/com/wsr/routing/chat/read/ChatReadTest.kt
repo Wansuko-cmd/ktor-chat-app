@@ -36,6 +36,7 @@ class ChatReadTest {
 
     @Test
     fun 制限をつけて読み取る場合(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
@@ -59,6 +60,7 @@ class ChatReadTest {
 
     @Test
     fun 制限として設定した値が数値に変換できないときBadRequestを返す(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
@@ -73,6 +75,7 @@ class ChatReadTest {
 
     @Test
     fun 特定のMessageを取得する場合(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
@@ -94,6 +97,7 @@ class ChatReadTest {
 
     @Test
     fun 存在しないidを指定した場合UnprocessableEntityを返す(){
+
         withTestApplication({
             module(isTest = true, testModule = testModule)
         }){
