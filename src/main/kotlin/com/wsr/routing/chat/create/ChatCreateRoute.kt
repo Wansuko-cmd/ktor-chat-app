@@ -7,6 +7,7 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.coroutines.async
 import kotlinx.serialization.SerializationException
 
 fun Route.chatCreateRoute(chatService: MessageServiceInterface) {
@@ -18,10 +19,13 @@ fun Route.chatCreateRoute(chatService: MessageServiceInterface) {
                 val (userName, text) = call.receive<ChatCreateRequest>()
 
                 //Messageを作成して永続化
-                val message = chatService.createMessage(userName, text)
+                val message = async{ chatService.createMessage(userName, text) }
+
+                //DBに保存している間に別の処理を実行
+                proceed()
 
                 //作成したMessageを返す
-                call.respond(ChatCreateResponse.fromMessage(message))
+                call.respond(ChatCreateResponse.fromMessage(message.await()))
 
             }
             //シリアライザーが上手くいかなければ

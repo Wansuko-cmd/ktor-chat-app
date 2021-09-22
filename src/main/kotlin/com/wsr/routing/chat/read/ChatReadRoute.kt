@@ -5,6 +5,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.coroutines.async
 import java.lang.NumberFormatException
 
 fun Route.chatReadRoute(chatService: MessageServiceInterface) {
@@ -13,14 +14,23 @@ fun Route.chatReadRoute(chatService: MessageServiceInterface) {
 
         try {
 
-            val chatReadResponds = chatService
-                //Messageを取得
-                .getMessages(call.request.queryParameters["limit"]?.toInt())
-                //ChatReadRespond型に変換
-                .map { ChatReadRespond.fromMessage(it) }
+            //上限の値を取得(nullの時は無制限)
+            val limit = call.request.queryParameters["limit"]?.toInt()
+
+            val chatReadResponds = async {
+
+                chatService
+                    //Messageを取得
+                    .getMessages(limit)
+                    //ChatReadRespond型に変換
+                    .map { ChatReadRespond.fromMessage(it) }
+            }
+
+            //DBで取得している間に別の処理を実行
+            proceed()
 
             //Messageのリストを返す
-            call.respond(chatReadResponds)
+            call.respond(chatReadResponds.await())
 
         }
         //limitが数値に変換できなければ
@@ -38,8 +48,15 @@ fun Route.chatReadRoute(chatService: MessageServiceInterface) {
         //idが指定されていれば
         if(id != null){
 
-            //該当するidのMessageを取得
-            val message =  chatService.getMessageById(id)
+            //該当するidのMessageを取得する処理
+            val messageDeferred = async { chatService.getMessageById(id) }
+
+            //DBで取得している間に別の処理を実行
+            proceed()
+
+
+            //実際のメッセージの取得
+            val message = messageDeferred.await()
 
             //メッセージが存在すれば
             if(message != null){

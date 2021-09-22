@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.wsr
 
 import com.wsr.installer.mainInstaller
