@@ -3,9 +3,7 @@ package com.wsr.mock.repository
 import com.wsr.domain.Message
 import com.wsr.mock.data.TestMessageData
 import com.wsr.repository.BaseRepositoryInterface
-import com.wsr.service.datetime.DatetimeService.now
 import com.wsr.service.message.exception.MessageNotFoundException
-import kotlinx.datetime.LocalDateTime
 import java.util.NoSuchElementException
 
 class TestRepository: BaseRepositoryInterface {

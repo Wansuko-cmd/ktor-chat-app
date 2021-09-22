@@ -54,7 +54,6 @@ fun Route.chatReadRoute(chatService: MessageServiceInterface) {
             //DBで取得している間に別の処理を実行
             proceed()
 
-
             //実際のメッセージの取得
             val message = messageDeferred.await()
 
