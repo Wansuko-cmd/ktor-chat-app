@@ -28,7 +28,7 @@ repositories {
 }
 
 tasks.create("stage") {
-    dependsOn("shadowJar")
+    dependsOn("runShadow")
 }
 
 dependencies {
