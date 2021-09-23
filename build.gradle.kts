@@ -27,9 +27,9 @@ repositories {
     maven { url = uri("https://wansuko-cmd.github.io/maven/") }
 }
 
-tasks.create("stage") {
-    dependsOn("runShadow")
-}
+//tasks.create("stage") {
+//    dependsOn("runShadow")
+//}
 
 dependencies {
 
