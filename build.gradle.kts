@@ -12,6 +12,8 @@ plugins {
     application
     kotlin("jvm") version "1.5.30"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.5.30"
+
+    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
 group = "com.wsr"
@@ -25,10 +27,6 @@ repositories {
     maven { url = uri("https://wansuko-cmd.github.io/maven/") }
 }
 
-tasks.create("stage"){
-    dependsOn("installDist")
-}
-
 dependencies {
 
     //Ktor
@@ -38,10 +36,6 @@ dependencies {
 
     //Log
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
-
-    //Test
-    testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
 
     //Koin
     implementation("io.insert-koin:koin-ktor:$koinVersion")
@@ -68,6 +62,10 @@ dependencies {
     //Content-Type-Checker
     implementation("com.wsr:content-type-checker:0.0.3")
 
+    //Test
+    testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+
     //H2
-    implementation("com.h2database:h2:1.4.200")
+    testImplementation("com.h2database:h2:1.4.200")
 }
