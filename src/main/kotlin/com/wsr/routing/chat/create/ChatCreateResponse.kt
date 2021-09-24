@@ -11,7 +11,9 @@ data class ChatCreateResponse(
     @SerialName("user_name")
     val userName: String,
     val text: String,
+    @SerialName("created_at")
     val createdAt: LocalDateTime,
+    @SerialName("updated_at")
     val updatedAt: LocalDateTime
 ){
     companion object {
