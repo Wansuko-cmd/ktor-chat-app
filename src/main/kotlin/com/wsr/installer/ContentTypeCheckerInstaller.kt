@@ -9,7 +9,7 @@ import io.ktor.response.*
 fun Application.contentTypeCheckerInstaller(){
 
     install(ContentTypeChecker){
-        onError = {
+        onErrorWhenAllow = {
             call.respond(
                 HttpStatusCode.UnsupportedMediaType,
                 """

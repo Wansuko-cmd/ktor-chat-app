@@ -64,7 +64,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:$flywayVersion")
 
     //Content-Type-Checker
-    implementation("com.wsr:content-type-checker:0.0.3")
+    implementation("com.wsr:content-type-checker:0.0.4")
 
     //Test
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
